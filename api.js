@@ -53,28 +53,51 @@ var gig = function(title, description) {
 	this.created_at = Date.now();
 	this.updated_at = null;
 	this.deleted_at = null;
-	
-	this.complete = function() {
-		this.completed = !this.completed;
-		this.updated_at = Date.now();
-	}
-	
-	this.delete = function() {
-		this.deleted_at = Date.now();
-		this.updated_at = Date.now();
-	}
 };
 
+
 // main storage of items in memory
-var gigs = [
-	new gig("Welcome!", "Welcome to your todo list!"),
-];
+var gigs = [];
+
+console.log(gigs);
 
 // fetch saved copy of list
 
 app.get('/gigs', function(req, res) {
-	res.send(gigs);
-})
+	
+	connection.query('SELECT * FROM gigs', function(err, rows, fields) {
+		gigs = rows;
+		res.send(gigs);
+	});
+});
+
+app.get('/gigs/:gig_id', function(req, res) {
+	connection.query('SELECT * FROM gigs WHERE id=' + req.params.gig_id, function(err, rows, fields) {
+		res.send(rows[0]);
+	});
+});
+
+app.post('/gigs/', function(req, res) {
+	var newGig;
+	if (req.body.title) {
+		newGig = new gig(req.body.title.trim(), req.body.description);
+		console.log(newGig);
+		gigs.push(newGig);
+		
+		connection.query('INSERT INTO gigs (id, title, description, creator, created_at, updated_at) VALUES('+newGig.id+', "'+newGig.title+'", "'+newGig.description+'", "'+newGig.creator+'", '+newGig.created_at+', '+newGig.updated_at+')', function(err, rows, fields) {
+			console.log(err, rows, fields);
+		});
+		
+		res.send(gigs);
+	} else {
+		console.log(req.body);
+		res.status(400).send('Error creating gig');
+	}
+});
+
+app.put('/gigs/:gig_id', function(req, res) {
+	console.log('update');
+});
 
 var saveToFile = function() {
 	
