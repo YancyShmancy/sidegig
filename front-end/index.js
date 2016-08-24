@@ -24,7 +24,7 @@
 			console.log(data);
 			
 			$('input, textarea').val("");
-		})
-	})
+		});
+	});
 	
 })();

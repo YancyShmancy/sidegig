@@ -3,8 +3,14 @@ console.log("api.js");
 const port = 1337;
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
+const session = require('express-session');
+const connection = require('./mysql-config');
 const app = express();
+const manageDB = require('./manageDB');
+
+app.set('views', __dirname + '/views');
+app.engine('html', require('ejs').renderFile);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function(req, res, next) {
@@ -13,35 +19,28 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, UPDATE, DELETE");
   next();
 });
+app.use(session({secret: 'sssshhh'}));
 
 itemCounter = 0;
 
 var creator;
+var sess;
 
-var connection = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	password: 'root',
-	port: '8889',
-	database: 'sidegig',
-	multipleStatements: true
-});
+//connection.connect(function(error) {
+//	if (error) {
+//		console.log('Error', error);
+//	} else {
+//		console.log('Mysql Connected');
+//	}
+//});
 
-connection.connect(function(error) {
-	if (error) {
-		console.log('Error', error);
-	} else {
-		console.log('Mysql Connected');
-	}
-});
-
-connection.query('SELECT * FROM users', function(err, rows, fields) {
-	if (!err) {
-		console.log('The solution is: ', rows);
-	} else {
-		console.log('error');
-	};
-});
+//connection.query('SELECT * FROM users', function(err, rows, fields) {
+//	if (!err) {
+//		console.log('The solution is: ', rows);
+//	} else {
+//		console.log('error');
+//	};
+//});
 
 var gig = function(title, description) {
 	this.title = title;
@@ -62,6 +61,16 @@ var gigs = [];
 console.log(gigs);
 
 // fetch saved copy of list
+
+app.get('/', function(req, res) {
+    sess = req.session;
+    
+    if (sess.email) {
+        res.redirect('/gigs');
+    } else {
+        res.render('index.html');
+    }
+})
 
 app.get('/gigs', function(req, res) {
 	
@@ -88,7 +97,7 @@ app.post('/gigs/', function(req, res) {
 			console.log(err, rows, fields);
 		});
 		
-		res.send(gigs);
+		res.send(newGig);
 	} else {
 		console.log(req.body);
 		res.status(400).send('Error creating gig');
@@ -97,18 +106,15 @@ app.post('/gigs/', function(req, res) {
 
 app.put('/gigs/:gig_id', function(req, res) {
 	console.log('update');
+    
 });
 
-var saveToFile = function() {
-	
-	var toStore = {
-		itemCounter: itemCounter,
-		items: items
-	}
-	fs.writeFile(dataFilePath, JSON.stringify(toStore), function(err) {
-		console.error(err);
-	});
-}
+app.post('/login', function(req, res) {
+    
+    sess = req.session;
+    sess.email = req.body.email;
+    res.end('done');
+})
 
 // app.use(express.static("public"));
 
