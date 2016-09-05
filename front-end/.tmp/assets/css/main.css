@@ -9,6 +9,9 @@
   border-right: 1px solid rgba(255, 255, 255, 0.3); }
 
 nav.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
   height: 50px !important;
   line-height: 50px;
   z-index: 9999 !important;
@@ -34,6 +37,7 @@ ul.side-nav {
 main {
   float: left;
   padding-left: 240px;
+  padding-top: 50px;
   width: 100%; }
 
 #search-gigs .input-field i {

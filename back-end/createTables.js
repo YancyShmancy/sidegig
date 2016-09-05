@@ -1,6 +1,5 @@
 console.log("createTables.js");
 
-const port = 1336;
 const mysql = require('mysql');
 
 var connection = mysql.createConnection({
@@ -28,7 +27,7 @@ connection.query('CREATE TABLE users(id int(11) NOT NULL, firstname varchar(50),
 	}
 } );
 
-connection.query('CREATE TABLE gigs(id int(11) NOT NULL, title varchar(50), description varchar(255), creator varchar(50), created_at int(50), updated_at int(50))', function(err, rows, fields) {
+connection.query('CREATE TABLE gigs(id int(11) NOT NULL AUTO_INCREMENT, title varchar(50), description varchar(255), creator varchar(50), created_at int(50), updated_at int(50), PRIMARY KEY(id))', function(err, rows, fields) {
 	if (err) {
 		console.log('Error creating gigs table', err);
 	} else {

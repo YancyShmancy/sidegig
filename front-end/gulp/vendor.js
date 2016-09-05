@@ -5,6 +5,7 @@ var gnf = require('gulp-npm-files');
 module.exports = function(options) {
     var vendorFiles = [
         'node_modules/jquery/dist/jquery.min.js',
+		'node_modules/materialize-css/dist/js/materialize.min.js',
         'node_modules/angular/angular.js'
     ];
     // Copy dependencies to build/node_modules/ 

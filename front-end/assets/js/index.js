@@ -1,15 +1,20 @@
 (function() {
     var gigs = [];
+	
     var app = angular.module('sidegig', [ ]);
-    
-    app.controller('ResultsController', function() {
-        this.gigs = gigs;
-    });
+//    app.value('gigs', gigs);
+	
+    app.controller('sidegigController', [ '$scope',
+		function($scope) {
+			$scope.gigs = gigs;
+		}
+	]);
 	
 	$(document).on('populate-gigs', function(event, data) {
 		console.log(data);
 		gigs = data.gigs;
-		console.log(gigs);
+//		scope.gigs = data.gigs;
+//		console.log(gigs);
 	});
     
 	$(document).on('add-gig', function(event, data) {
@@ -31,6 +36,8 @@
 
 (function() {
 	
+	$('.modal-trigger').leanModal();
+	
 	var api_url = "http://127.0.0.1:1337";
 	
 	$.ajax(api_url+'/gigs', {
@@ -41,11 +48,11 @@
 		$(document).trigger('populate-gigs', {gigs: data});
 	});
 	
-	$('form').on('submit', function(e) {
+	$('form.submit-gig').on('submit', function(e) {
 		e.preventDefault();
 		var params = {
-			title: $('#form-create input[name="title"]').val(),
-			description: $('#form-create textarea').val()
+			title: $('.submit-gig input[name="title"]').val(),
+			description: $('.submit-gig textarea').val()
 		}
 		
 		$.ajax(api_url+'/gigs', {
@@ -54,16 +61,32 @@
 			dataType: 'json'
 		}).done(function(data) {
 			console.log(data);
-			$('#form-create').toggleClass('active');
-			$('#search-gigs, #gig-list').toggleClass('inactive');
+			$('#create-gig').closeModal();
 			$(document).trigger('add-gig', {gig: data});
 			$('input, textarea').val("");
 		});
 	});
 	
-	$('#create').on('click', function(e) {
+	$('form.login-form').on('submit', function(e) {
 		e.preventDefault();
-		$('#form-create').toggleClass('active');
-		$('#search-gigs, #gig-list').toggleClass('inactive');
-	})
+		var params = {
+			username: $('.login-form input[name="username"]').val(),
+			password: $('.login-form input[name="password"]').val()
+		}
+		
+		$.ajax(api_url+'/users/login', {
+			method: 'POST',
+			data: params
+		}).done(function(data) {
+			console.log(data);
+			$('#login-modal').closeModal();
+		}).fail(function(err) {
+			console.log(err);
+		})
+	});
+	
+//	$('#create-btn').on('click', function(e) {
+//		$('#create-gig').openModal();
+//	});
+	
 })();
