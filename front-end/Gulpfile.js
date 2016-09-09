@@ -1,12 +1,13 @@
 var gulp = require('gulp');
 var wrench = require('wrench');
 var options = {
-  src: './',
-  dist: 'build',
-  tmp: '.tmp',
-  imagesDir: 'assets/img',
-  fontsDir: 'assets/fonts',
-  jsDir: 'assets/js'
+	src: './',
+	dist: 'build',
+	tmp: '.tmp',
+	imagesDir: 'assets/img',
+	fontsDir: 'assets/fonts',
+	jsDir: 'assets/js',
+	pagesDir: './pages'
 };
 
 // gulp wrench pulls in all files from gulp dir and requires them

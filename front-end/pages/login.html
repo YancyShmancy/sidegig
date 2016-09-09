@@ -1,0 +1,18 @@
+<div class="card login-card" ng-controller="loginPageController">
+	<form class="login-form" ng-controller="LoginController" ng-submit="login(credentials)" novalidate>
+		<div class="card-content">
+			<h4>Login</h4>
+			<div class="input-field col s12 m8 offset-m2">
+				<input id="icon_prefix2" type="text" class="validate" placeholder="username" name="username" ng-model="credentials.username"> 
+			</div>
+			<div class="input-field col s12 m8 offset-m2">
+				<input id="icon_prefix2" class="validate" placeholder="password" name="password" ng-model="credentials.password">
+			</div>
+			<div class="input-field col s12 m8 offset-m2">
+				<input type="submit" class="waves-effect waves-light btn">
+			</div>
+			
+		</div>
+	</form>
+
+</div>

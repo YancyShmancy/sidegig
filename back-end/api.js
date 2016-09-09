@@ -9,7 +9,12 @@ const cookieParser = require('cookie-parser');
 const validator = require('email-validator');
 const CryptoJS = require('crypto-js');
 const authenticate = require('./authenticator.js');
+const MySQLStore = require('connect-mysql')(session);
+const config = require('./connect-mysql-config.js');
+const uuid = require('uuid');
+const parseurl = require('parseurl');
 const app = express();
+
 
 app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
@@ -22,22 +27,48 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, UPDATE, DELETE");
   next();
 });
-app.use(cookieParser());
+//app.use(MySQLStore(express));
+app.set('trust proxy', 1);
 app.use(session({
+	genid: function(req) {
+		return uuid.v4(); // use UUIDs for session IDs
+	},
+	name: 'session',
+//	store: new MySQLStore(config),
 	secret: 'sssshhh',
 	resave: false,
-	saveUninitialized: true,
-	cookie: { secure: true }
+	saveUnitialized: true,
+	cookie: {
+		name: 'session',
+		secure: true
+	}
 }));
+
+app.use(function (req, res, next) {
+  var views = req.session.views
+
+  if (!views) {
+    views = req.session.views = {}
+  }
+
+  // get the url pathname
+  var pathname = parseurl(req).pathname
+
+  // count the views
+  views[pathname] = (views[pathname] || 0) + 1
+
+  next()
+})
 
 itemCounter = 0;
 
 var creator;
-var sess;
+var user;
 
-var gig = function(title, description) {
+var gig = function(title, description, category) {
 	this.title = title;
 	this.description = description;
+	this.category = category;
 	this.id = itemCounter++;
 	this.comments = null;
 	this.creator = creator;
@@ -56,37 +87,50 @@ console.log(gigs);
 // fetch saved copy of list
 
 app.get('/', function(req, res) {
-    sess = req.session;
-    
-    if (sess.email) {
-        res.redirect('/gigs');
-    } else {
-        res.render('index.html');
-    }
+    res.send(req.session);
+//    if (sess.email) {
+//        res.redirect('/gigs');
+//    } else {
+//        res.redirect('/gigs');
+//    }
 });
 
 app.get('/gigs', function(req, res) {
-	sess = req.session;
-	
 	connection.query('SELECT * FROM gigs', function(err, rows, fields) {
 		gigs = rows;
 		res.send(gigs);
 	});
 });
 
-app.get('/gigs/:gig_id', authenticate, function(req, res) {
+app.get('/gigs/:gig_id', function(req, res) {
 	connection.query('SELECT * FROM gigs WHERE id=' + req.params.gig_id, function(err, rows, fields) {
-		res.send(rows[0]);
+		if (err) {
+			console.log(err);
+		} else {
+			res.send(rows[0]);
+		}
 	});
 });
 
-app.post('/gigs/', authenticate, function(req, res) {
+app.get('/gigs/category/:category_name', function(req, res) {
+	
+	connection.query('SELECT * FROM gigs WHERE category="'+req.params.category_name+'"', function(err, rows, fields) {
+		if (err) {
+			res.send(err).status(400);
+		} else {
+			gigs = rows;
+			res.send(gigs);
+		}
+	})
+})
+
+app.post('/gigs/', function(req, res) {
 
 	var newGig;
 	if (req.body.title) {
-		newGig = new gig(req.body.title.trim(), req.body.description);
+		newGig = new gig(req.body.title.trim(), req.body.description, req.body.category);
 		
-		connection.query('INSERT INTO gigs (title, description, creator, created_at, updated_at) VALUES("'+newGig.title+'", "'+newGig.description+'", "'+newGig.creator+'", '+newGig.created_at+', '+newGig.updated_at+')', function(err, result) {
+		connection.query('INSERT INTO gigs (title, description, category, creator, created_at, updated_at) VALUES("'+newGig.title+'", "'+newGig.description+'", "'+newGig.category+'", "'+newGig.creator+'", '+newGig.created_at+', '+newGig.updated_at+')', function(err, result) {
 			
 			if(err) {
 				// handle err
@@ -126,7 +170,7 @@ app.post('/users', function(req, res) {
 		var email = req.body.email;
 		var username = req.body.username;
 		
-		connection.query('INSERT INTO users (firstname, lastname, username, password, email) VALUES("'+firstname+'", "'+lastname+'", "'+username+'", "'+password+'", "'+email+'")', function(err, result) {
+		connection.query('INSERT INTO users (firstname, lastname, username, password, email, role) VALUES("'+firstname+'", "'+lastname+'", "'+username+'", "'+password+'", "'+email+'", "guest")', function(err, result) {
 			
 			if(err) {
 				console.log(err);
@@ -157,12 +201,15 @@ app.post('/users/login', function(req, res) {
 				user = result[0];
 				
 				if (user.password == password) {
-					sess = req.session;
-					sess.email = user.email;
-					sess.firstname = user.firstname;
-					sess.lastname = user.lastname;
-					sess.username = user.username;
-					res.send(sess);
+//					req.session.email = user.email;
+//					req.session.firstname = user.firstname;
+//					req.session.lastname = user.lastname;
+//					req.session.username = user.username;
+//					req.session.save();
+					req.session.user = user;
+					req.session.sessionID = req.sessionID;
+					req.session.cookie.expires = new Date(Date.now() + 3600000);
+					res.send(req.session);
 				} else {
 					res.send("Incorrect username or password").status(400);
 				}
@@ -178,24 +225,29 @@ app.post('/users/login', function(req, res) {
 				user = result[0];
 				
 				if (user.password == password) {
-					sess = req.session;
-					sess.email = user.email;
-					sess.firstname = user.firstname;
-					sess.lastname = user.lastname;
-					sess.username = user.username;
-					res.send(sess);
+//					req.session.email = user.email;
+//					req.session.firstname = user.firstname;
+//					req.session.lastname = user.lastname;
+//					req.session.username = user.username;
+//					req.session.save();
+					req.session.sessionID = req.sessionID;
+					req.session.user = user;
+					req.session.cookie.expires = new Date(Date.now() + 3600000)
+					res.send(req.session);
+					
 				} else {
 					res.send("Incorrect username or password").status(400);
 				}
 			}
 		});
+		
 	} else {
 		console.log("error");
 		res.send("Error").status(400);
 	}
+	
+//	res.send(req.session.user);
 });
-
-
 
 // app.use(express.static("public"));
 app.listen(port, function () {

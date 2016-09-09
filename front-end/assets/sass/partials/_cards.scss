@@ -1,0 +1,75 @@
+.card {
+	.card-content {
+		padding: 0;
+		padding-bottom: 15px;
+	}
+	
+	.card-image {
+		overflow: hidden;
+		height: 140px;
+		
+		img {
+			min-height: 100%;
+			width: auto;
+			width: 100%;
+			-webkit-filter: brightness(0.5);
+		}
+		
+		span.card-title {
+			float: left;
+			color: white;
+			width: 100%;
+			padding: 0 15px;
+			font-size: 1em;
+			text-transform: capitalize;
+			font-weight: 600;
+		}
+	}
+
+	
+	
+	span.creator,
+	span.description,
+	span.category {
+		padding-left: 15px;
+		color: black !important;
+		display: block;
+	}
+	
+	span.creator {
+		padding-top: 15px;
+		font-weight: 400;
+		font-size: 0.8em;
+	}
+	
+	span.description {
+		font-weight: 300;
+		font-size: 0.8em;
+		padding: 0 15px 15px 15px;
+	}
+	
+	h4 {
+		padding-bottom: 15px;
+		margin: 0;
+		text-align: center;
+	}
+	
+	&.create-card,
+	&.login-card {
+		position: absolute;
+		top: 30px;
+		left: 50%;
+		padding: 50px 0;
+	}
+	
+	&.create-card {
+		width: 700px;
+		margin-left: -350px;
+		
+	}
+	
+	&.login-card {
+		margin-left: -250px;
+		width: 500px;
+	}
+}

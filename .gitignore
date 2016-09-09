@@ -1,3 +1,5 @@
 node_modules
 mysql-config
 createTables
+bootstrap
+connect-mysql-config

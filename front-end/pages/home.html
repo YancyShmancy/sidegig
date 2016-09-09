@@ -1,0 +1,17 @@
+ 
+ <a class="gig-link col m6 l3" ng-controller="homeController" ng-href="#gigs/{{gig.id}}" ng-repeat="gig in gigs" ng-if="currentUser">
+	<div class="card hoverable z-depth-0">
+		<div class="card-content">
+			<div class="card-image">
+				<img ng-src="./assets/img/{{gig.category}}.jpg" alt="">
+				<span class="card-title">
+				{{gig.title}}
+				</span>
+			</div>
+
+			<span class="creator">Gig Architect: {{gig.creator}}</span>
+			<span class="description truncate">{{gig.description}}</span>
+<!--                        <span class="category">Category: {{gig.category}}</span>-->
+		</div>
+	</div>
+</a>

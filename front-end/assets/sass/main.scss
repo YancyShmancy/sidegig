@@ -1,9 +1,23 @@
+@import 'partials/mixins';
+@import 'partials/cards';
+
+
+body {
+	background: #F0F0F0;
+}
+
+* {
+	font-family: 'Open Sans';
+}
+
+.btn {
+	background-color: #34495e !important;
+}
 
 .page-title {
     float: left;
-    width: 240px;
+    width: 220px;
     font-size: 1.5em;
-    text-transform: uppercase;
     text-align: center;
     height: 50px;
     display: inline-block;
@@ -18,14 +32,29 @@ nav.top-nav {
     line-height: 50px;
     z-index: 9999 !important;
     background-color: rgba(34, 49, 63, 1);
+	
+	.dropdown-content li a {
+		color: rgba(34, 49, 63, 1);
+	}
     
     form {
         display: inline-block;
     }
+	
+	.dropdown-button {
+		height: 50px;
+		
+		i {
+			height: 50px;
+			line-height: 50px;
+			margin-left: 5px;
+		}
+	}
 }
 
 ul.side-nav {
     margin-top: 50px;
+	width: 220px;
     background-color: #34495e;
     
     a {
@@ -46,9 +75,13 @@ ul.side-nav {
 
 main {
     float: left;
-    padding-left: 240px;
+    padding-left: 220px;
 	padding-top: 50px;
     width: 100%;
+	
+	@include breakpoint(tablet) {
+		padding-left: 0;
+	}
 }
 
 #search-gigs .input-field  {
@@ -72,29 +105,28 @@ input:focus, textarea:focus {
 	border-color: rgba(34, 49, 63, 1) !important;
 }
 
-#form-create {
-	opacity: 0;
-	transform: scale(0.8);
-	transition: 0.25s opacity, 0.25s transform;
-	visibility: hidden;
-	position: absolute;
-	top: 30px;
-	left: 50%;
-	margin-left: -350px;
-	width: 700px;
-	z-index: 9999999;
-	
-	&.active {
-		visibility: visible;
-		opacity: 1;
-		transform: scale(1);
+.submit-gig,
+.login-form {
+	input, 
+	textarea, 
+	.select-wrapper,
+	.category-label {
+//		max-width: 400px;
 	}
 	
-	h2 {
-		margin-bottom: 30px;
-	}
-}
+	.select-wrapper,
+	.category-label {
 
+	}
+	
+	input, 
+	textarea, 
+	select,
+	option {
+		text-align: center;
+	}
+
+}
 #search-gigs, #gig-list {
 	opacity: 1;
 	transform: scale(1);
@@ -106,3 +138,13 @@ input:focus, textarea:focus {
 	}
 }
 
+#gig-list {
+	padding: 20px 20px;
+}
+
+nav a.button-collapse,
+nav a.button-collapse i{
+	cursor: pointer;
+	height: 50px;
+	line-height: 50px;
+}

@@ -4,7 +4,7 @@ var bs = require("browser-sync").create();
 module.exports = function(options) {
     
   // Static Server + watching scss/html files
-  gulp.task('serve', ['images', 'fonts', 'inject', 'watch'], function() {
+  gulp.task('serve', ['images', 'fonts', 'pages', 'inject', 'watch'], function() {
       
       bs.init({
           server: {
@@ -15,8 +15,8 @@ module.exports = function(options) {
     
   gulp.task('watch', function() {
       
-    gulp.watch(['./assets/sass/**/*.scss', 'assets/js/**/*.js', '*.html'], ['inject']);
+    gulp.watch(['./assets/sass/**/*.scss', 'assets/js/**/*.js', '*.html', './pages/*.html'], ['inject']);
     // and call any methods on it.
-      bs.watch(['.tmp/*.html']).on('change', bs.reload);
+      bs.watch(['.tmp/*.html', '.tmp/pages/*.html']).on('change', bs.reload);
   });
 }
