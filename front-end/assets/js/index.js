@@ -4,6 +4,7 @@
 	var singleGig = {};
 	var href;
     var app = angular.module('sidegig', ['ngRoute' ]);
+	var api_url = "http://127.0.0.1:1337/";
 	
 	app.config(function($routeProvider) {
 		
@@ -63,6 +64,7 @@
 			return $http
 					.post(api_url+'users/login', credentials)
 					.then(function (res) {
+//						console.log(res);
 						Session.create(res.data.sessionID, res.data.user.id, res.data.user.role);
 						
 						return res.data.user;
@@ -70,6 +72,7 @@
 		};
 		
 		authService.isAuthenticated = function() {
+			console.log("authService.isAuthenticated", !!Session.userId);
 			return !!Session.userId;
 		};
 		
@@ -81,13 +84,15 @@
 		};
 		
 		return authService;
-	})
+	});
 	
 	app.service('Session', function() {
 		this.create = function (sessionId, userId, userRole) {
 			this.id = sessionId;
 			this.userId = userId;
 			this.userRole = userRole;
+			
+			console.log("creating session", this);
 		};
 		
 		this.destroy = function () {
@@ -95,7 +100,7 @@
 			this.userId = null;
 			this.userRole = null;
 		}
-	})
+	});
 	
 	app.controller('ApplicationController', function($scope, USER_ROLES, AuthService) {
 		$scope.currentUser = null;
@@ -117,6 +122,7 @@
 			AuthService.login(credentials).then(function (user) {
 				$rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
 				$scope.setCurrentUser(user);
+				
 				$location.path('/');
 			}, function() {
 				$rootScope.$broadcast(AUTH_EVENTS.loginFailed);
@@ -218,89 +224,5 @@
 			})
 		}
 	])
-	
-	
-	
-	var api_url = "http://127.0.0.1:1337/";
-	
-	$('form.submit-gig').on('submit', function(e) {
-		e.preventDefault();
-		var params = {
-			title: $('.submit-gig input[name="title"]').val(),
-			description: $('.submit-gig textarea').val(),
-			category: $('.submit-gig select').val()
-		}
-		
-		$.ajax(api_url+'gigs', {
-			method: 'POST',
-			data: params,
-			dataType: 'json'
-		}).done(function(data) {
-			console.log(data);
-			$('#create-gig').closeModal();
-			$(document).trigger('add-gig', {gig: data});
-			$('input, textarea').val("");
-		});
-	});
-	
-//	$('form.login-form').on('submit', function(e) {
-//		e.preventDefault();
-//		var params = {
-//			username: $('.login-form input[name="username"]').val(),
-//			password: $('.login-form input[name="password"]').val()
-//		}
-//		
-//		$.ajax(api_url+'users/login', {
-//			method: 'POST',
-//			data: params
-//		}).done(function(data) {
-//			console.log(data);
-//			$('#login-modal').closeModal();
-//		}).fail(function(err) {
-//			console.log(err);
-//		});
-//	});
-	
-//	$(document).on('click', 'a.gig-link', function(e) {
-//		href = $(this).attr("href").slice(1);
-//		console.log(href);
-//		
-////		$.ajax(api_url+href, {
-////			method: 'GET',
-////			dataType: 'json'
-////		}).done(function(data) {
-////			console.log(data);
-////			$(document).trigger('single-gig', {gig: data});
-////			$('#gig-list').empty();
-////			$singleGig = $('<div>');
-////			$singleGig.addClass('card single-gig col s12');
-////			$singleGig.append('<div class="card-content"><span class="card-title">'+data.title+'</span><p class="creator">'+data.creator+'</p><p>'+data.category+'</p><p class="description">'+data.description+'</p></div>');
-////			$('#gig-list').append($singleGig);
-////		})
-//	});
-	
-//	$(document).on('click', '.side-nav a', function(e) {
-//		e.preventDefault();
-//		href = $(this).attr("href");
-//		
-//		if ($(this).hasClass('all')) {
-//			$.ajax(api_url+'gigs', {
-//				method: 'GET',
-//				dataType: 'json'
-//			}).done(function(data) {
-//				console.log(data);
-//				$(document).trigger('sort-gigs', {gigs: data});
-//			});
-//		} else {
-//			$.ajax(api_url+href, {
-//				method: 'GET',
-//				dataType: 'json'
-//			}).done(function(data) {
-//				console.log("ajax callback:", data);
-//				$(document).trigger('sort-gigs', {gigs: data});
-//			})
-//		}
-//		
-//	});
 	
 })();

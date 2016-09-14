@@ -17,26 +17,14 @@
   },
   "homepage": "https://github.com/YancyShmancy/sidegig#readme",
   "dependencies": {
-    "bcrypt": "^0.8.7",
     "body-parser": "^1.15.2",
-    "connect": "^3.4.1",
-    "connect-mssql": "^1.5.0",
-    "connect-mysql": "^2.1.1",
+    "cookie-parser": "^1.4.3",
     "crypto-js": "^3.1.6",
-    "ejs": "^2.5.1",
+    "email-validator": "^1.0.5",
     "express": "^4.14.0",
     "express-session": "^1.14.1",
     "jsonwebtoken": "^7.1.9",
     "mysql": "^2.11.1",
-    "node-mysql": "^0.4.2",
-    "parseurl": "^1.3.1",
-    "passport": "^0.3.2",
-    "passport-auth0": "^0.5.2",
-    "pg": "^6.1.0",
-    "pg-hstore": "^2.3.2",
-    "sequelize": "^3.24.1",
-    "sqlite3": "^3.1.4",
-    "underscore": "^1.8.3",
     "uuid": "^2.0.2"
   }
 }
