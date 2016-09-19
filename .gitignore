@@ -3,4 +3,6 @@ mysql-config
 createTables
 bootstrap
 connect-mysql-config
-tmp
+.tmp
+back-end-backup
+build

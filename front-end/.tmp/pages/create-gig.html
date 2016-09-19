@@ -1,6 +1,6 @@
-<div class="card create-card" ng-controller="createController">
+<div class="card create-card">
 
-	<form class="submit-gig">
+	<form class="submit-gig" ng-if="$root.user">
 		<div class="card-content">
 			<h4 class="text-center">Create a Gig</h4>
 			<div class="input-field col s8 offset-s2">
@@ -24,6 +24,12 @@
 			</div>
 		</div>
 	</form>
+	
+	<div class="card-content" ng-if="!$root.user">
+		<p class="text-center">You must be logged in to submit a gig.</p>
+		<a href="/login">Login</a>
+		<a href="/register">Register</a>
+	</div>
 	
 	<script type="text/javascript">
 		$('select').material_select();

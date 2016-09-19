@@ -1,5 +1,6 @@
  
- <a class="gig-link col m6 l3" ng-controller="homeController" ng-href="#gigs/{{gig.id}}" ng-repeat="gig in gigs" ng-if="currentUser">
+ <div class="gigs-container">
+ <a class="gig-link col m6 l3" ng-href="#gigs/{{gig.id}}" ng-repeat="gig in gigs">
 	<div class="card hoverable z-depth-0">
 		<div class="card-content">
 			<div class="card-image">
@@ -15,3 +16,4 @@
 		</div>
 	</div>
 </a>
+</div>

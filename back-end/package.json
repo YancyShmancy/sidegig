@@ -1,30 +1,24 @@
 {
-  "name": "sidegig",
+  "name": "sequelize-build",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/YancyShmancy/sidegig.git"
-  },
-  "author": "Allison Yancy",
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/YancyShmancy/sidegig/issues"
-  },
-  "homepage": "https://github.com/YancyShmancy/sidegig#readme",
   "dependencies": {
+    "bcrypt": "^0.8.7",
     "body-parser": "^1.15.2",
     "cookie-parser": "^1.4.3",
     "crypto-js": "^3.1.6",
-    "email-validator": "^1.0.5",
+    "email-validator": "^1.0.7",
     "express": "^4.14.0",
     "express-session": "^1.14.1",
     "jsonwebtoken": "^7.1.9",
     "mysql": "^2.11.1",
-    "uuid": "^2.0.2"
+    "sequelize": "^3.24.3",
+    "underscore": "^1.8.3"
   }
 }

@@ -7,11 +7,13 @@
       rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-    
+    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.css' type='text/css' media='all' />
     <!-- inject:css -->
     <!-- endinject -->
+    
+     
 </head>
-<body ng-controller="ApplicationController">
+<body>
    
     <header>
         <nav class="top-nav">
@@ -19,15 +21,15 @@
                	<a role="button" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
                 <a href="./#/" class="page-title">Sidegig.io</a>
                 <ul id="dropdown1" class="dropdown-content">
-					<li><a href="#!">Your Profile</a></li>
-					<li><a href="#!">Settings</a></li>
+					<li><a href="#profile">Your Profile</a></li>
+					<li><a href="#settings">Settings</a></li>
 					<li class="divider"></li>
-					<li><a href="#!">Log Out</a></li>
+					<li><button ng-click="$root.logout()">Log Out</button></li>
 				</ul>
                 <ul class="right hide-on-med-and-down">
                    	<li><a href="#create-gig"  id="create-btn">Create Gig</a></li>
-                    <li><a href="#!" class="dropdown-button" data-activates="dropdown1">Account<i class="material-icons right">arrow_drop_down</i></a></li>
-                    <li><a href="#login" >Log In</a></li>
+                    <li><a href="#!" class="dropdown-button" data-activates="dropdown1">Account<i class="material-icons right" ng-if="$root.user">arrow_drop_down</i></a></li>
+                    <li><a href="#login" ng-if="!$root.user">Log In</a></li>
                     
                 </ul>
             </div>
@@ -54,7 +56,6 @@
         
         
 	</header>
-   
   
    
     <main>
@@ -67,6 +68,7 @@
     <!-- inject:js -->
     <!-- endinject -->
     
-    
+    <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js'></script>
+
 </body>
 </html>

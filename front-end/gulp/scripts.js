@@ -18,7 +18,6 @@ module.exports = function(options) {
        return gulp.src(options.jsDir + '/**/*.js')
           .pipe(eslint())
           .pipe(eslint.format(friendlyFormatter))
-          .pipe(uglify())
           .pipe(concat('app.js'))
           .pipe(gulp.dest(options.dist + '/assets/js/app/'));
     });

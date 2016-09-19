@@ -75,6 +75,7 @@ ul.side-nav {
 
 main {
     float: left;
+	position: relative;
     padding-left: 220px;
 	padding-top: 50px;
     width: 100%;
@@ -140,6 +141,17 @@ input:focus, textarea:focus {
 
 #gig-list {
 	padding: 20px 20px;
+	
+	
+}
+
+.bar {
+	float: left;
+	position: relative;
+}
+
+.text-center {
+	text-align: center;
 }
 
 nav a.button-collapse,
@@ -148,3 +160,5 @@ nav a.button-collapse i{
 	height: 50px;
 	line-height: 50px;
 }
+
+

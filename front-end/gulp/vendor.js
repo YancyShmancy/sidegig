@@ -7,7 +7,9 @@ module.exports = function(options) {
         'node_modules/jquery/dist/jquery.min.js',
 		'node_modules/materialize-css/dist/js/materialize.min.js',
         'node_modules/angular/angular.js',
-		'node_modules/angular-route/angular-route.js'
+		'node_modules/angular-route/angular-route.js',
+		'node_modules/angular-loading-bar/build/loading-bar.js',
+		'node_modules/angular-cookies/angular-cookies.js'
     ];
     // Copy dependencies to build/node_modules/ 
     gulp.task('copyNpmDependenciesOnly', function() {
