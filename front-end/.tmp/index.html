@@ -31,6 +31,7 @@
                    	<li><a href="#create-gig"  id="create-btn">Create Gig</a></li>
                     <li><a href="#!" class="dropdown-button" data-activates="dropdown1">Account<i class="material-icons right" ng-if="$root.user">arrow_drop_down</i></a></li>
                     <li><a href="#login" ng-if="!$root.user">Log In</a></li>
+                    <li><a href="#register" ng-if="!$root.user">Register</a></li>
                     
                 </ul>
             </div>
@@ -51,8 +52,16 @@
             <li><a href="#/gigs/category/comics"><i class="material-icons">create</i> Graphic Novels</a></li>
             <li><a href="#/gigs/category/games"><i class="material-icons">power_settings_new</i> Game Development</a></li>
             <li><a href="#create-gig"  id="create-btn">Create Gig</a></li>
-			<li><a href="#!" class="dropdown-button" data-activates="dropdown2">Account<i class="material-icons right">arrow_drop_down</i></a></li>
-			<li><a href="#login" >Log In</a></li>
+            <ul id="dropdown2" class="dropdown-content">
+				<li><a href="#profile">Your Profile</a></li>
+				<li><a href="#settings">Settings</a></li>
+				<li class="divider"></li>
+				<li><button ng-click="$root.logout()">Log Out</button></li>
+			</ul>
+			<li><a href="#!" class="dropdown-button" data-activates="dropdown2" ng-if="$root.user">Account<i class="material-icons right">arrow_drop_down</i></a></li>
+			<li><a href="#login" ng-if="!$root.user">Log In</a></li>
+       		<li><a href="#register" ng-if="!$root.user">Register</a></li>
+       		
         </ul>
         
         

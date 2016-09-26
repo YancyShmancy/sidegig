@@ -105,13 +105,7 @@ app.post('/gigs', middleware.requireAuthentication, function(req, res) {
 })
 
 app.post('/users', function(req, res) {
-	var body = {
-		email: req.body.email,
-		username: req.body.username,
-		password: req.body.password ,
-		firstname: req.body.firstname,
-		lastname: req.body.lastname
-	};
+	var body = _.pick(req.body, 'username', 'password', 'email', 'firstname', 'lastname');
 	
 	console.log(body);
 	db.user.create(body).then(function(user) {

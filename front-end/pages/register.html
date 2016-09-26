@@ -1,0 +1,36 @@
+<div class="card register-card">
+	<form class="register-form" ng-submit="register(credentials)" ng-if="!$root.user" novalidate>
+		<div class="card-content">
+			<h4>Register</h4>
+			<div class="input-field col s12 m8 offset-m2">
+				<input id="icon_prefix2" type="text" class="validate" placeholder="Username" name="username" ng-model="credentials.username"> 
+			</div>
+			<div class="input-field col s12 m8 offset-m2">
+				<input id="icon_prefix2" class="validate" placeholder="Password" type="password" name="password" ng-model="credentials.password">
+			</div>
+			<div class="input-field col s12 m8 offset-m2">
+				<input id="icon_prefix2" class="validate" placeholder="Confirm Password" type="password" name="confirmPassword" ng-model="credentials.confirmPassword">
+			</div>
+			<div class="input-field col s12 m8 offset-m2">
+				<input id="icon_prefix2" type="text" class="validate" placeholder="Email" name="email" ng-model="credentials.email">
+			</div>
+			
+			<div class="input-field col s12 m8 offset-m2">
+				<input id="icon_prefix2" type="text" class="validate" placeholder="First Name" name="firstname" ng-model="credentials.firstname">
+			</div>
+			<div class="input-field col s12 m8 offset-m2">
+				<input id="icon_prefix2" type="text" class="validate" placeholder="Last Name" name="lastname" ng-model="credentials.lastname">
+			</div>
+			<div class="input-field col s12 m8 offset-m2">
+				<input type="submit" class="waves-effect waves-light btn">
+			</div>
+		</div>
+	</form>
+	
+	<div class="card-content" ng-if="$root.user">
+		<h4>You're already logged in!</h4>
+		<a href="/profile">View Your Profile</a><br>
+		<a href="/create-gig">Create a Gig</a><br>
+		<a href="/logout">Log Out</a>
+	</div>
+</div>

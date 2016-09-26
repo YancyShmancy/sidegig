@@ -6,7 +6,7 @@
 				<input id="icon_prefix2" type="text" class="validate" placeholder="username" name="username" ng-model="credentials.username"> 
 			</div>
 			<div class="input-field col s12 m8 offset-m2">
-				<input id="icon_prefix2" class="validate" placeholder="password" name="password" ng-model="credentials.password">
+				<input id="icon_prefix2" class="validate" placeholder="password" type="password" name="password" ng-model="credentials.password">
 			</div>
 			<div class="input-field col s12 m8 offset-m2">
 				<input type="submit" class="waves-effect waves-light btn">
@@ -14,10 +14,10 @@
 		</div>
 	</form>
 	
-	<div class="card-content" ng-if="$root.user">
+	<div class="card-content text-center" ng-if="$root.user">
 		<h4>You're already logged in!</h4>
-		<a href="/profile">View Your Profile</a>
-		<a href="/create-gig">Create a Gig</a>
+		<a href="/profile">View Your Profile</a><br>
+		<a href="/create-gig">Create a Gig</a><br>
 		<a href="/logout">Log Out</a>
 	</div>
 </div>

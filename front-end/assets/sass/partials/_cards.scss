@@ -55,7 +55,8 @@
 	}
 	
 	&.create-card,
-	&.login-card {
+	&.login-card,
+	&.register-card {
 		position: absolute;
 		top: 30px;
 		left: 50%;
@@ -65,11 +66,19 @@
 	&.create-card {
 		width: 700px;
 		margin-left: -350px;
-		
 	}
 	
 	&.login-card {
 		margin-left: -250px;
 		width: 500px;
+	}
+	
+	&.register-card {
+		width: 700px;
+		margin-left: -350px;
+		
+		input {
+			text-align: center;
+		}
 	}
 }

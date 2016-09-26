@@ -46,6 +46,11 @@
 			templateUrl: 'pages/home.html'
 		})
 		
+		.when('/register', {
+			controller: 'registerController',
+			templateUrl: 'pages/register.html'
+		})
+		
 		$httpProvider.defaults.withCredentials = true;
 		cfpLoadingBarProvider.includeBar = true;
 		cfpLoadingBarProvider.parentSelector = '#gig-list';
@@ -95,7 +100,6 @@
 	})
 	
 	app.controller('ApplicationController', ['Auth', '$rootScope', function($rootScope, $http, Auth) {
-		
 	}]);
 
 	
@@ -110,6 +114,7 @@
 				dataType: 'json'
 			}).success(function(data) {
 				$scope.gigs = data;
+				console.log(data);
 			})
 		}
 	]);
@@ -170,6 +175,38 @@
 			}
 		}
 	]);
+	
+	app.controller('registerController', [
+		'$scope',
+		'$http',
+		'$location',
+		'Auth',
+		function($scope, $http, $location, Auth) {
+			$scope.register = function(credentials) {
+				if (credentials.password !== credentials.confirmPassword) {
+					return false;
+				}
+				
+				$http({
+					method: 'post',
+					url: api_url+'users',
+					data: {
+						username: credentials.username,
+						password: credentials.password,
+						email: credentials.email,
+						firstname: credentials.firstname,
+						lastname: credentials.lastname
+					},
+					dataType: 'json'
+				}).then(function(data) {
+					console.log(data);
+					$location.path('/login');
+				}, function(response) {
+					alert(response);
+				})
+			}
+		}
+	])
 	
 	app.controller('createController', [
 		'$scope',
