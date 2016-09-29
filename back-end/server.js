@@ -84,13 +84,15 @@ app.post('/gigs', middleware.requireAuthentication, function(req, res) {
 	
 	console.log(req.cookies);
 	
-	var body = {
-		title: req.body.title,
-		description: req.body.description,
-		category: req.body.category,
-		rolesFilled: req.body.rolesFilled,
-		rolesNeeded: req.body.rolesNeeded
-	}
+//	var body = {
+//		title: req.body.title,
+//		description: req.body.description,
+//		category: req.body.category,
+//		rolesFilled: req.body.rolesFilled,
+//		rolesNeeded: req.body.rolesNeeded
+//	}
+	
+	var body = _.pick(req.body, 'title', 'description', 'category', 'rolesFilled', 'rolesNeeded');
 	
 	db.gig.create(body).then(function(gig) {
 		res.json(gig);
@@ -116,10 +118,12 @@ app.post('/users', function(req, res) {
 });
 
 app.post('/users/login', function(req, res) {
-	var body = {
-		username: req.body.username,
-		password: req.body.password
-	}
+//	var body = {
+//		username: req.body.username,
+//		password: req.body.password
+//	}
+	
+	var body = _.pick(req.body, 'username', 'password');
 	
 	db.user.authenticate(body).then(function(user) {
 		res.cookie('Auth', user.generateToken('authentication'), {

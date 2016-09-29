@@ -1,23 +1,31 @@
 <div class="card create-card">
 
-	<form class="submit-gig" ng-if="$root.user">
+	<form class="submit-gig" ng-if="$root.user" ng-submit="create(inputs)">
 		<div class="card-content">
 			<h4 class="text-center">Create a Gig</h4>
 			<div class="input-field col s8 offset-s2">
-				<input id="icon_prefix2" type="text" class="validate" placeholder="title" name="title">
+				<input id="icon_prefix2" type="text" class="validate" placeholder="title" name="title" ng-model="inputs.title">
 			</div>
 			<div class="input-field col s8 offset-s2">
-				<textarea id="icon_prefix2" class="materialize-textarea validate" placeholder="description" name="description"></textarea>
+				<textarea id="icon_prefix2" class="materialize-textarea validate" placeholder="description" name="description" ng-model="inputs.description"></textarea>
 			</div>
 			<div class="input-field col s8 offset-s2">
-				<select>
+				<select class="browser-default" ng-model="inputs.category">
 				  <option value="" disabled selected>Select Category</option>
 				  <option value="web">Web Development</option>
 				  <option value="music">Music</option>
 				  <option value="comics">Graphic Novels</option>
 				  <option value="games">Game Development</option>
 				</select>
-				<label class="category-label">Category</label>
+<!--				<label class="category-label">Category</label>-->
+			</div>
+			<div class="range-field col s8 offset-s2">
+				<label>Roles Filled</label>
+				<input type="range" id="test5" min="0" max="8" ng-model="inputs.rolesFilled" />
+			</div>
+			<div class="range-field col s8 offset-s2">
+				<label>Roles Needed</label>
+				<input type="range" id="test5" min="0" max="8" ng-model="inputs.rolesNeeded" />
 			</div>
 			<div class="input-field col s8 offset-s2">
 				<input type="submit" class="waves-effect waves-light btn">

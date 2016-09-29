@@ -1,13 +1,18 @@
+'use strict';
+
 (function() {
 	$(".button-collapse").sideNav();
+//	$('select').material_select();
     var gigs = [];
 	var singleGig = {};
 	var href;
-    var app = angular.module('sidegig', ['ngRoute', 'angular-loading-bar', 'ngCookies' ]);
+    var app = angular.module('sidegig', ['ngRoute', 'angular-loading-bar', 'ngCookies'], function($provide) {
+		
+	});
 //	var api_url = "https://peaceful-coast-76647.herokuapp.com/";
 	var api_url = "http://127.0.0.1:4000/";
 	
-	app.config(['$routeProvider', '$httpProvider', '$httpProvider', function($routeProvider, $httpProvider, cfpLoadingBarProvider) {
+	app.config(['$routeProvider', '$httpProvider', '$provide', function($routeProvider, $httpProvider, cfpLoadingBarProvider, $provide) {
 		
 		$routeProvider
 		
@@ -57,11 +62,43 @@
     	cfpLoadingBarProvider.spinnerTemplate = '<div><span class="fa fa-spinner">Loading Gigs...</div>';
 	}]);
 	
-	app.factory('Auth', ['$http', '$rootScope', '$cookies', '$location', function($http, $rootScope, $cookies, $location) {
+	app.service('Auth', ['$http', '$rootScope', '$cookies', '$location', function($http, $rootScope, $cookies, $location) {
 		
 		return {
+			register: function(credentials) {
+				$http({
+					method: 'post',
+					url: api_url+'users',
+					data: {
+						username: credentials.username,
+						password: credentials.password,
+						email: credentials.email,
+						firstname: credentials.firstname,
+						lastname: credentials.lastname
+					},
+					dataType: 'json'
+				}).then(function(data) {
+					console.log(data);
+					$location.path('/login');
+				}, function(response) {
+					alert(response);
+				})
+			},
+			login: function(credentials) {
+				$http({
+					method: 'post',
+					url: api_url+'users/login',
+					data: {
+						username: credentials.username,
+						password: credentials.password
+					},
+					dataType: 'json'
+				}).success(function(data) {
+					console.log(data);
+					$location.path('/');
+				})
+			},
 			logout: function() {
-				
 				console.log("Auth.logout");
 				$http({
 					method: 'GET',
@@ -86,6 +123,19 @@
 		}
 	}]);
 	
+	app.service('http_service', function($http, $routeParams) {
+		this.backendCall = function(params) {
+			console.log("backend call");
+			return $http({
+				method: params.method,
+				url: params.url,
+				data: params.data || null,
+				dataType: 'json'
+			})
+		}
+		
+	});
+	
 	app.run( function($rootScope, $location, Auth) {
 		
 		$rootScope.logout = Auth.logout;
@@ -99,57 +149,56 @@
 		});
 	})
 	
-	app.controller('ApplicationController', ['Auth', '$rootScope', function($rootScope, $http, Auth) {
+	app.controller('ApplicationController', ['Auth', '$rootScope', function($rootScope, $http, Auth, backend) {
 	}]);
 
 	
     app.controller('homeController', [ 
 		'$scope',
+		'http_service',
 		'$http',
-		function($scope, $http) {
-			
-			$http({
-				method: 'GET',
-				url: api_url+'gigs/',
-				dataType: 'json'
-			}).success(function(data) {
-				$scope.gigs = data;
-				console.log(data);
-			})
+		function($scope, http_service, $http) {
+			var params = {
+				method: 'get',
+				url: api_url+'gigs/'
+			}
+			http_service.backendCall(params).then(function(results) {
+				$scope.gigs = results.data;
+			});
 		}
 	]);
 	
 	app.controller('singleGigController', [
-		'$scope', 
+		'$scope',
+		'http_service',
 		'$http',
 		'$routeParams',
-		function($scope, $http, $routeParams) {
+		function($scope, http_service, $http, $routeParams) {
 			$scope.gig = {};
-			
-			$http({
+			var params = {
 				method: 'GET',
-				url: api_url+'gigs/'+$routeParams.id,
-				dataType: 'json'
-			}).success(function(data) {
-				$scope.gig = data;
+				url: api_url+'gigs/'+$routeParams.id
+			}
+			http_service.backendCall(params).then(function(results) {
+				$scope.gig = results.data;
 			})
 		}
 	]);
 	
 	app.controller('categoriesController', [
 		'$scope',
+		'http_service',
 		'$http',
 		'$routeParams',
-		function($scope, $http, $routeParams) {
+		function($scope, http_service, $http, $routeParams) {
 			$scope.gigs = [];
-			
-			$http({
+			var params = {
 				method: 'GET',
 				url: api_url+'gigs/category/'+$routeParams.category_name,
-				dataType: 'json'
-			}).success(function(data) {
-				$scope.gigs = data;
-			})
+			}
+			http_service.backendCall(params).then(function(results) {
+				$scope.gigs = results.data;
+			});
 		}
 	]);
 	
@@ -160,19 +209,8 @@
 		'Auth',
 		function($scope, $http, $location, Auth) {
 			$scope.login = function(credentials) {
-				$http({
-					method: 'post',
-					url: api_url+'users/login',
-					data: {
-						username: credentials.username,
-						password: credentials.password
-					},
-					dataType: 'json'
-				}).success(function(data) {
-					console.log(data);
-					$location.path('/');
-				})
-			}
+				Auth.login(credentials);
+			};
 		}
 	]);
 	
@@ -185,50 +223,35 @@
 			$scope.register = function(credentials) {
 				if (credentials.password !== credentials.confirmPassword) {
 					return false;
+				} else {
+					Auth.register(credentials);
 				}
-				
-				$http({
-					method: 'post',
-					url: api_url+'users',
-					data: {
-						username: credentials.username,
-						password: credentials.password,
-						email: credentials.email,
-						firstname: credentials.firstname,
-						lastname: credentials.lastname
-					},
-					dataType: 'json'
-				}).then(function(data) {
-					console.log(data);
-					$location.path('/login');
-				}, function(response) {
-					alert(response);
-				})
 			}
 		}
 	])
 	
 	app.controller('createController', [
 		'$scope',
+		'http_service',
 		'$http',
 		'$location',
-		function($scope, $http, $location) {
-			
-			$('.submit-gig').on('submit', function(e) {
-				e.preventDefault();
-				$http({
-					method: 'post',
-					url: api_url+'gigs',
+		function($scope, http_service, $http, $location) {
+			$scope.create = function(inputs) {
+				var params = {
+					method: 'POST',
+					url: api_url+'gigs/',
 					data: {
-						title: $('.submit-gig input[name="title"]').val(),
-						description: $('.submit-gig textarea').val(),
-						category: $('.submit-gig select').val()
-					}, 
-					dataType: 'json'
-				}).success(function(data) {
-					$location.path('/gigs/'+data.id);
+						title: inputs.title,
+						description: inputs.description,
+						category: inputs.category,
+						rolesNeeded: inputs.rolesNeeded,
+						rolesFilled: inputs.rolesFilled
+					}
+				}
+				http_service.backendCall(params).then(function(results) {
+					$location.path('/gigs/'+results.data.id);
 				})
-			})
+			};
 		}
 	])
 	
